@@ -1,0 +1,676 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200&display=swap');
+
+:root {
+  --font-style: 'Nunito Sans', sans-serif;
+  --color1 : #f785b8;
+}
+
+::-webkit-scrollbar{
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb{
+  background: linear-gradient(
+    to bottom,
+    #ff850a,
+    #ff3474
+    );
+    border-radius: 50px;
+}
+
+::-webkit-scrollbar-track{
+  background: #3b3d43;
+}
+
+body {
+  background: #3b3d43;
+  margin: 0;
+  font-family: var(--font-style);
+}
+
+main {
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 100px;
+  padding: 0;
+}
+
+                                                                                                                            /* navbar */
+.navbar {
+  display: flex;
+  height: 75px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  align-items: center;
+  width: 100%;
+  background: #19191c;
+  color: #f9f9f9;
+  justify-content: space-between;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 25%;
+  margin-right: 20px;
+}
+
+.navbar-middle{
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+
+#navbar-logo-icon {
+  height: 50px;
+  margin-right: 20px;
+}
+
+.bouton {
+  text-decoration: none;
+  color: #fff;
+  opacity: 0.5;
+  background: #ffffff00;
+  font-size: xx-large;
+  margin-right: 20px;
+}
+
+.bouton:hover {
+  text-decoration: none;
+  color: #ff850a;
+  opacity: 1;
+  background: #ffffff00;
+  font-size: xx-large;
+  font-weight: bold;
+}
+
+.navbar-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 25%;
+  border-radius: 10px;
+  border: #fff;
+  justify-content: flex-end;
+}
+
+.search-box {
+  background: #666666;
+  height: 40px;
+  border-radius: 40px;
+  padding: 10px;
+  
+}
+
+.search-box:hover>.search-txt {
+  width: 240px;
+  padding: 0 6px;
+}
+
+.search-box:hover>.search-btn {
+  background: white;
+  color: black;
+}
+
+.search-btn {
+  color: #eeeeee;
+  float: right;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #2f3640;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.4s;
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.search-btn>i {
+  font-size: 20px;
+  font-style: normal;
+}
+
+.search-txt {
+  border: none;
+  background: none;
+  outline: none;
+  float: left;
+  padding: 0;
+  color: white;
+  font-size: 16px;
+  transition: 0.4s;
+  line-height: 40px;
+  width: 0px;
+  font-weight: bold;
+}
+
+
+                                                                                                                              /* card */
+.card-meme {
+  border-radius: 1em;
+  width: 30%;
+  position: relative;
+  background-clip: border-box;
+  background: #3b3d43;
+  padding-top: 7px;
+  padding-bottom: 10px;
+  margin-bottom: 1em;
+}
+
+.card-meme:before{
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  margin: -2px;
+  border-radius: inherit;
+  background: linear-gradient(
+    to bottom,
+    #ff850a,
+    #ff3474);
+}
+
+.user-card-meme {
+  border-radius: 1em;
+  width: 23%;
+  position: relative;
+  background-clip: border-box;
+  background: #3b3d43;
+  padding-top: 7px;
+  padding-bottom: 10px;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.user-card-meme:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  margin: -2px;
+  border-radius: inherit;
+  background: linear-gradient(to bottom,
+      #ff850a,
+      #ff3474);
+}
+
+.card-meme-user{
+  display: flex;
+  justify-content: center;
+}
+
+.card-meme-user > a {
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  font-size: 20px;
+}
+
+.card-meme-user>a:visited {
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  font-size: 20px;
+}
+
+.card-meme-img{
+  margin-top: 5px;
+}
+
+.card-meme-liked > p {
+  margin-top: 5px;
+  margin-bottom: 1px;
+  color: #fff;
+}
+
+.card-meme-description > p {
+  margin-top: 1px;
+  margin-bottom: 1px;
+  color: #fff;
+}
+
+.card-meme-commentaire > p {
+  margin-top: 1px;
+  margin-bottom: 1px;
+  color: #fff;
+}
+
+.card-meme-button {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  vertical-align: middle;
+  align-items: center;
+  align-content: center;
+}
+
+.rangement{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: stretch;
+  margin-top: 80px;
+  margin-bottom: 10px;
+}
+
+.meme-image{
+  max-height: 100%;
+  width: 100%;
+  height: auto;
+}
+
+.meme-position{
+  display: flex;
+  justify-content: center;
+}
+
+.like{
+  margin-left: 2px;
+
+}
+
+.like-button{
+  padding-left: 10px;
+  padding-right: 10px;
+  text-decoration: none;
+  color: #000;
+  border-radius: 1em;
+  background-color: rgb(177, 177, 177);
+}
+
+.like-button:hover {
+  text-decoration: none;
+  color: #000;
+  border-radius: 1em;
+  background-color: lightpink;
+}
+
+.liked-button {
+  padding-left: 10px;
+  padding-right: 10px;
+  text-decoration: none;
+  color: #000;
+  border-radius: 1em;
+  background-color: lightpink;
+}
+
+.liked-button:hover {
+  text-decoration: none;
+  color: #000;
+  border-radius: 1em;
+  background-color: rgb(177, 177, 177);
+}
+
+
+
+.share{
+  margin-right: 2px;
+}
+
+.share-button {
+  padding-left: 10px;
+  padding-right: 10px;
+  text-decoration: none;
+  color: #000;
+  border-radius: 1em;
+  background-color: rgb(177, 177, 177);
+}
+
+.share-button:hover {
+  text-decoration: none;
+  color: #000;
+  border-radius: 1em;
+  background-color: lightblue;
+}
+
+.add-commentaire{
+  display: flex;
+  /* width: -webkit-fill-available;
+  height: -webkit-fill-available; */
+}
+
+.com{
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-left: 10px;
+  color: #fff;
+}
+
+.usrcomment{
+  resize: none;
+  width: -webkit-fill-available;
+  height: -webkit-fill-available;
+  border-radius: 1em;
+}
+
+.usrcomment-submit {
+  border-radius: 1em;
+  width: 8em;
+  background-color: rgb(177, 177, 177);
+}
+
+                                                                                                                      /* card content */
+
+.card-meme-content {
+  border-radius: 1em;
+  width: 70%;
+  position: relative;
+  background-clip: border-box;
+  background: #3b3d43;
+  padding: 7px 5px 10px 5px;
+}
+
+.card-meme-content:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  margin: -2px;
+  border-radius: inherit;
+  background: linear-gradient(to bottom,
+      #ff850a,
+      #ff3474);
+}
+
+.two-colums {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.meme-image-content {
+  height: 100%;
+  width: 100%;
+  /* height: auto; */
+}
+
+.card-meme-img {
+  margin-top: 5px;
+}
+
+.card-meme-info{
+  margin-left: 5px;
+}
+
+                                                                                                                                                        /* Upload file */
+#upload-file{
+  background-color: #fff;
+  border-radius: 1em;
+  width: 100%;
+}
+
+.card-meme-create {
+  border-radius: 1em;
+  width: 70%;
+  position: relative;
+  background-clip: border-box;
+  background: #3b3d43;
+  padding: 7px 5px 10px 5px;
+  display: flex;
+  justify-content: center;
+}
+
+.card-meme-create:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  margin: -2px;
+  border-radius: inherit;
+  background: linear-gradient(to bottom,
+      #ff850a,
+      #ff3474);
+}
+
+#create-form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 70%;
+}
+
+#add-comment-create{
+  margin-top: 1em;
+  width: 100%;
+  border-radius: 1em;
+  outline: #ff3474;
+  resize: none;
+}
+
+#confirm{
+  width: 5em;
+  border-radius: 1em;
+  background-color: rgb(177, 177, 177);
+}
+
+
+                                                                                                                                                            /* picture */
+picture{
+  position: relative;
+  cursor: pointer;
+  display: inline-grid;
+  overflow: hidden;
+}
+
+picture::after{
+  content: "";
+  position: absolute;
+  inset: 0px;
+  --_g: conic-gradient(at 50% 25%, rgb(0 0 0/90%) 75%, #0000 0) no-repeat;
+  background: var(--_g) 0 calc(34% - var(--_p, 0%))/ 50.1% 400%, var(--_g) 100% calc(100% - var(--_p, 0%))/ 50.1% 400%;
+  transition:  0.5s linear;
+}
+
+picture.alt::after{
+  transform: scale(-1);
+}
+
+picture:hover::after{
+  --_p: 134%;
+}
+
+
+                                                                                                                                                         /* Login.php */
+
+
+.align {
+  display: grid;
+  place-items: center;
+}
+
+.grid {
+  inline-size: 90%;
+  margin-inline: auto;
+  max-inline-size: 20rem;
+}
+
+.hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.icons {
+  display: none;
+}
+
+.icon {
+  block-size: 1em;
+  display: inline-block;
+  fill: #606468;
+  inline-size: 1em;
+  vertical-align: middle;
+}
+
+/* layout/base.css */
+
+* {
+  box-sizing: inherit;
+}
+
+/* modules/anchor.css */
+
+:root {
+  --anchorColor: #eee;
+}
+
+a {
+  color: #eee;
+  outline: 0;
+  text-decoration: none;
+}
+
+a:focus,
+a:hover {
+  text-decoration: underline;
+}
+
+/* modules/form.css */
+
+:root {
+  --formGap: 0.875rem;
+}
+
+input {
+  background-image: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  margin: 0;
+  outline: 0;
+  padding: 0;
+  transition: background-color 0.3s;
+}
+
+input[type="submit"] {
+  cursor: pointer;
+}
+
+.form {
+  display: grid;
+  gap: var(--formGap);
+}
+
+.form input[type="password"],
+.form input[type="text"],
+.form input[type="submit"] {
+  inline-size: 100%;
+}
+
+.form__field {
+  display: flex;
+}
+
+.form__input {
+  flex: 1;
+}
+
+/* modules/login.css */
+
+:root {
+  --loginBorderRadus: 0.25rem;
+  --loginColor: #eee;
+
+  --loginInputBackgroundColor: #1c1f22;
+  --loginInputHoverBackgroundColor: #3b4148;
+
+  --loginLabelBackgroundColor: #000;
+
+  --loginSubmitBackgroundColor: #ea4c88;
+  --loginSubmitColor: #eee;
+  --loginSubmitHoverBackgroundColor: #d44179;
+}
+
+.login {
+  color: var(--loginColor);
+}
+
+.login label,
+.login input[type="text"],
+.login input[type="password"],
+.login input[type="submit"] {
+  border-radius: var(--loginBorderRadus);
+  padding: 1rem;
+}
+
+.login label {
+  background-color: var(--loginLabelBackgroundColor);
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  padding-inline: 1.25rem;
+}
+
+.login input[type="password"],
+.login input[type="text"] {
+  background-color: var(--loginInputBackgroundColor);
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.login input[type="password"]:focus,
+.login input[type="password"]:hover,
+.login input[type="text"]:focus,
+.login input[type="text"]:hover {
+  background-color: var(--loginInputHoverBackgroundColor);
+}
+
+.login input[type="submit"] {
+  background-color: var(--loginSubmitBackgroundColor);
+  color: var(--loginSubmitColor);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.login input[type="submit"]:focus,
+.login input[type="submit"]:hover {
+  background-color: var(--loginSubmitHoverBackgroundColor);
+}
+
+/* modules/text.css */
+
+p {
+  margin-block: 1.5rem;
+}
+
+.text--center {
+  text-align: center;
+}
+
+.pagination{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.page-item{
+  margin-left: 1em;
+  float: left;
+}
+
+.nav-pagination{
+  display: flex;
+  justify-content: center;
+}
