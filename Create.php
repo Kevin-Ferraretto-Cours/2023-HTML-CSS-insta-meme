@@ -20,6 +20,14 @@ if ($_GET) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="./styles.css" rel="stylesheet" />
+    <?php 
+        if (isset($_GET['id'])) {
+            $canonical_url = "https://insta-meme.kevin-ferraretto.fr/Content.php?id=" . htmlspecialchars($_GET['id']);
+        } else {
+            $canonical_url = "https://insta-meme.kevin-ferraretto.fr/Create.php";
+        }
+        echo '<link rel="canonical" href="' . $canonical_url . '" />';
+    ?>
     <title>Create</title>
     <link rel="apple-touch-icon" sizes="57x57" href="img/favicon/apple-icon-57x57.png" />
     <link rel="apple-touch-icon" sizes="60x60" href="img/favicon/apple-icon-60x60.png" />
