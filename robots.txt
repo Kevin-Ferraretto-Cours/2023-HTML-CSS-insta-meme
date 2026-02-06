@@ -3,5 +3,3 @@ Allow: /
 Disallow: /Action_*.php
 Disallow: /*from=*
 Disallow: /PDO.php
-
-Sitemap: https://insta-meme.kevin-ferraretto.fr/sitemap.xml
