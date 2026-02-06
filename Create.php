@@ -27,6 +27,9 @@ if ($_GET) {
             $canonical_url = "https://insta-meme.kevin-ferraretto.fr/Create.php";
         }
         echo '<link rel="canonical" href="' . $canonical_url . '" />';
+        if (isset($_GET['from'])) {
+            echo '<meta name="robots" content="noindex, follow" />';
+        }
     ?>
     <title>Create</title>
     <link rel="apple-touch-icon" sizes="57x57" href="img/favicon/apple-icon-57x57.png" />
