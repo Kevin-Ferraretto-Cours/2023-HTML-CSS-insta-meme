@@ -63,6 +63,12 @@ $result = $stmt->fetch();
 	        $canonical_url = "https://insta-meme.kevin-ferraretto.fr/index.php";
 	    }
 	    echo '<link rel="canonical" href="' . $canonical_url . '" />';
+		if ($currentPage > 1) {
+        	echo '<link rel="prev" href="https://insta-meme.kevin-ferraretto.fr/index.php?page=' . ($currentPage - 1) . '" />';
+	    }
+	    if ($currentPage < $pages) {
+	        echo '<link rel="next" href="https://insta-meme.kevin-ferraretto.fr/index.php?page=' . ($currentPage + 1) . '" />';
+	    }
     ?>
     <title>Home</title>
     <link rel="apple-touch-icon" sizes="57x57" href="img/favicon/apple-icon-57x57.png" />
