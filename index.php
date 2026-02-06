@@ -56,6 +56,14 @@ $result = $stmt->fetch();
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="./styles.css" rel="stylesheet" />
+	<?php 
+	    if (isset($_GET['page']) && $_GET['page'] > 1) {
+	        $canonical_url = "https://insta-meme.kevin-ferraretto.fr/index.php?page=" . (int)$_GET['page'];
+	    } else {
+	        $canonical_url = "https://insta-meme.kevin-ferraretto.fr/index.php";
+	    }
+	    echo '<link rel="canonical" href="' . $canonical_url . '" />';
+    ?>
     <title>Home</title>
     <link rel="apple-touch-icon" sizes="57x57" href="img/favicon/apple-icon-57x57.png" />
     <link rel="apple-touch-icon" sizes="60x60" href="img/favicon/apple-icon-60x60.png" />
