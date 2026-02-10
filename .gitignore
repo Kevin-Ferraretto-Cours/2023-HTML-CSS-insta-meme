@@ -1,0 +1,39 @@
+# Fichiers de configuration sensibles
+PDO.php
+config.php
+.env
+
+# Dossier des memes uploadés (images utilisateurs)
+meme/*
+!meme/.gitkeep
+
+# Fichiers de base de données
+*.sql
+database.sql
+
+# Fichiers système et IDE
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Fichiers de log
+*.log
+error.log
+access.log
+
+# Fichiers temporaires
+*.tmp
+*.temp
+*.cache
+
+# Sauvegardes
+*.backup
+*.bak
+*.old
+
+# Fichiers de thumbnail/cache d'images
+thumbs/
+cache/

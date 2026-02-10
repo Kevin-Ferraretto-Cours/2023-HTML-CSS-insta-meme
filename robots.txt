@@ -1,5 +1,32 @@
+# Robots.txt pour InstaMeme
+# Mis à jour : Février 2026
+
 User-agent: *
 Allow: /
+Allow: /index.php
+Allow: /Content.php
+Allow: /User.php
+Allow: /Create.php
+Allow: /Login.php
+Allow: /Register.php
+Allow: /meme/
+Allow: /img/
+
+# Bloquer les fichiers d'action et de configuration
 Disallow: /Action_*.php
-Disallow: /*from=*
 Disallow: /PDO.php
+Disallow: /header.php
+Disallow: /styles.css
+
+# Bloquer les URLs avec paramètres from= (éviter duplicate content)
+Disallow: /*from=*
+
+# Bloquer les fichiers système
+Disallow: /*.sql$
+Disallow: /LICENSE
+
+# Sitemap
+Sitemap: https://insta-meme.kevin-ferraretto.fr/sitemap.php
+
+# Crawl-delay pour éviter la surcharge
+Crawl-delay: 1

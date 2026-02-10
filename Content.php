@@ -1,5 +1,53 @@
-<?php session_start();
+<?php 
+session_start();
 require_once 'PDO.php';
+require_once 'meta_tags.php';
+
+// Récupérer les données du contenu pour les meta tags
+$stmt = $conn->prepare("SELECT
+    utilisateurs.pseudo,
+    contenus.description,
+    contenus.chemin_image,
+    DATE_FORMAT(contenus.date_publication,'%Y-%m-%dT%H:%i:%s') AS published_time,
+    likes2.nb_likes
+FROM
+    contenus
+INNER JOIN
+    utilisateurs
+ON
+    utilisateurs.id=contenus.id_utilisateur
+LEFT JOIN (
+    SELECT
+        id_contenu,
+        COUNT(id_utilisateur) AS nb_likes
+    FROM
+        likes
+    GROUP BY
+        id_contenu
+) AS likes2
+ON 
+    likes2.id_contenu=contenus.id
+WHERE
+    contenus.id=:id;");
+$stmt->execute(['id' => $_GET['id']]);
+$content = $stmt->fetch();
+
+// Préparer les meta tags
+$baseUrl = 'https://insta-meme.kevin-ferraretto.fr';
+$imageUrl = $baseUrl . '/meme/' . $content['chemin_image'];
+$pageTitle = htmlspecialchars($content['description']) . " - Par " . $content['pseudo'] . " | InstaMeme";
+$pageDescription = htmlspecialchars($content['description']) . " - Découvrez ce meme partagé par " . $content['pseudo'];
+$pageUrl = $baseUrl . "/Content.php?id=" . $_GET['id'];
+
+$metaData = [
+    'title' => $pageTitle,
+    'description' => $pageDescription,
+    'url' => $pageUrl,
+    'image' => $imageUrl,
+    'type' => 'article',
+    'author' => $content['pseudo'],
+    'published_time' => $content['published_time']
+];
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -8,12 +56,38 @@ require_once 'PDO.php';
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <?php echo generateMetaTags('content', $metaData); ?>
+    
     <link href="./styles.css" rel="stylesheet" />
 	<?php 
 	    $canonical_url = "https://insta-meme.kevin-ferraretto.fr/Content.php?id=" . htmlspecialchars($_GET['id']);
 	    echo '<link rel="canonical" href="' . $canonical_url . '" />';
     ?>
-    <title>Content</title>
+    
+    <title><?php echo $pageTitle; ?></title>
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ImageObject",
+        "name": "<?php echo htmlspecialchars($content['description']); ?>",
+        "description": "<?php echo htmlspecialchars($content['description']); ?>",
+        "contentUrl": "<?php echo $imageUrl; ?>",
+        "datePublished": "<?php echo $content['published_time']; ?>",
+        "author": {
+            "@type": "Person",
+            "name": "<?php echo htmlspecialchars($content['pseudo']); ?>"
+        },
+        "interactionStatistic": {
+            "@type": "InteractionCounter",
+            "interactionType": "https://schema.org/LikeAction",
+            "userInteractionCount": <?php echo $content['nb_likes'] ?? 0; ?>
+        }
+    }
+    </script>
+    
     <link rel="apple-touch-icon" sizes="57x57" href="img/favicon/apple-icon-57x57.png" />
     <link rel="apple-touch-icon" sizes="60x60" href="img/favicon/apple-icon-60x60.png" />
     <link rel="apple-touch-icon" sizes="72x72" href="img/favicon/apple-icon-72x72.png" />
@@ -37,56 +111,25 @@ require_once 'PDO.php';
     <?php require_once 'header.php'; ?>
     <main>
         <div class="rangement">
-            <div class="card-meme-content">
+            <div class="card-meme-content" itemscope itemtype="https://schema.org/ImageObject">
                 <div class="two-colums">
-                    <?php
-                    $stmt = $conn->prepare("SELECT
-                        utilisateurs.pseudo,
-                        contenus.description,
-                        contenus.chemin_image,
-                        likes2.nb_likes
-                        FROM
-                            contenus
-                        INNER JOIN
-                            utilisateurs
-                        ON
-                            utilisateurs.id=contenus.id_utilisateur
-                        LEFT JOIN (
-                            SELECT
-                                id_contenu,
-                                COUNT(id_utilisateur) AS nb_likes
-                            FROM
-                                likes
-                            GROUP BY
-                                id_contenu
-                        ) AS likes2
-                        ON 
-                            likes2.id_contenu=contenus.id
-                        WHERE
-                            contenus.id=:id;");
-                    $stmt->execute(
-                        [
-                            'id' => $_GET['id']
-                        ]
-                    );
-                    $content = $stmt->fetch();
-                    ?>
                     <div class="card-meme-img">
                         <?php
-                        echo "<img class='meme-image-content' src='./meme/" . $content['chemin_image'] . "' alt='meme1' />";
+                        echo "<img class='meme-image-content' src='./meme/" . $content['chemin_image'] . "' alt='" . htmlspecialchars($content['description']) . "' itemprop='contentUrl' />";
                         ?>
-
+                        <meta itemprop="name" content="<?php echo htmlspecialchars($content['description']); ?>" />
+                        <meta itemprop="datePublished" content="<?php echo $content['published_time']; ?>" />
                     </div>
                     <div class="card-meme-info">
                         <div class="card-meme-user">
                             <?php
-                            echo "<a href='User.php?pseudo=" . $content['pseudo'] . "'>" . $content['pseudo'] . "</a>";
+                            echo "<a href='User.php?pseudo=" . $content['pseudo'] . "' itemprop='author'>" . htmlspecialchars($content['pseudo']) . "</a>";
                             ?>
                         </div>
                         <div class="card-meme-description">
-                            <p class="description">
+                            <p class="description" itemprop="description">
                                 <?php
-                                echo "<u><b>Description:</b></u> " . $content['description'];
+                                echo "<u><b>Description:</b></u> " . htmlspecialchars($content['description']);
                                 ?>
                             </p>
                         </div>
@@ -127,7 +170,7 @@ require_once 'PDO.php';
                         <div class="card-meme-liked">
                             <p class="liked">
                                 <?php
-                                echo "<u><b>Aimer par:</b></u> " . $content['nb_likes'] . " personne";
+                                echo "<u><b>Aimer par:</b></u> " . ($content['nb_likes'] ?? 0) . " personne";
                                 ?>
                             </p>
                         </div>
@@ -158,7 +201,7 @@ require_once 'PDO.php';
                                     ]
                                 );
                                 foreach ($statement as $ligne) {
-                                    echo "<p class='com'>" . $ligne['pseudo'] . ": " . $ligne['message'] . "</p>";
+                                    echo "<p class='com'>" . htmlspecialchars($ligne['pseudo']) . ": " . htmlspecialchars($ligne['message']) . "</p>";
                                 } ?>
                             </div>
                             <?php
@@ -169,7 +212,6 @@ require_once 'PDO.php';
                             echo "<input hidden type='text' name='id' value='" . $_GET['id'] . "' />";
                             echo "<input hidden type='text' name='from' value='Content.php?id=" . $_GET['id'] . "' />";
                             ?>
-
                             <input type="submit" class="usrcomment-submit" value="Commenter" />
                             </form>
                         </div>

@@ -1,5 +1,7 @@
-<?php session_start();
+<?php 
+session_start();
 require_once 'PDO.php';
+require_once 'meta_tags.php';
 
 // On détermine sur quelle page on se trouve
 if (isset($_GET['page']) && !empty($_GET['page'])) {
@@ -10,16 +12,9 @@ if (isset($_GET['page']) && !empty($_GET['page'])) {
 
 // On détermine le nombre total d'articles
 $sql = 'SELECT COUNT(*) AS nb_articles FROM `contenus`;';
-
-// On prépare la requête
 $stmt = $conn->prepare($sql);
-
-// On exécute
 $stmt->execute();
-
-// On récupère le nombre d'articles
 $result = $stmt->fetch();
-
 $nbArticles = (int) $result['nb_articles'];
 
 // On détermine le nombre d'articles par page
@@ -31,30 +26,29 @@ $pages = ceil($nbArticles / $parPage);
 // Calcul du 1er article de la page
 $premier = ($currentPage * $parPage) - $parPage;
 
-$sql = 'SELECT
- *
-FROM
- likes
- WHERE id_contenu=56;';
+// Préparer les meta tags
+$baseUrl = 'https://insta-meme.kevin-ferraretto.fr';
+$pageTitle = $currentPage > 1 ? "InstaMeme - Page $currentPage" : "InstaMeme - Découvrez les meilleurs memes";
+$pageDescription = "Découvrez, partagez et interagissez avec les meilleurs memes de notre communauté. Page $currentPage sur $pages.";
+$pageUrl = $currentPage > 1 ? "$baseUrl/index.php?page=$currentPage" : "$baseUrl/index.php";
 
-// On prépare la requête
-$stmt = $conn->prepare($sql);
-
-// On exécute
-$stmt->execute();
-
-// On récupère le nombre d'articles
-$result = $stmt->fetch();
-
-
+$metaData = [
+    'title' => $pageTitle,
+    'description' => $pageDescription,
+    'url' => $pageUrl,
+    'type' => 'website'
+];
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <?php echo generateMetaTags('home', $metaData); ?>
+    
     <link href="./styles.css" rel="stylesheet" />
 	<?php 
 	    if (isset($_GET['page']) && $_GET['page'] > 1) {
@@ -70,7 +64,25 @@ $result = $stmt->fetch();
 	        echo '<link rel="next" href="https://insta-meme.kevin-ferraretto.fr/index.php?page=' . ($currentPage + 1) . '" />';
 	    }
     ?>
-    <title>Home</title>
+    
+    <title><?php echo htmlspecialchars($pageTitle); ?></title>
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "InstaMeme",
+        "url": "<?php echo $baseUrl; ?>",
+        "description": "Plateforme de partage de memes",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "<?php echo $baseUrl; ?>/Action_search.php?Search={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+    
     <link rel="apple-touch-icon" sizes="57x57" href="img/favicon/apple-icon-57x57.png" />
     <link rel="apple-touch-icon" sizes="60x60" href="img/favicon/apple-icon-60x60.png" />
     <link rel="apple-touch-icon" sizes="72x72" href="img/favicon/apple-icon-72x72.png" />
@@ -130,10 +142,10 @@ $result = $stmt->fetch();
             $stmt->bindValue(':parpage', $parPage, PDO::PARAM_INT);
             $stmt->execute();
             foreach ($stmt as $row) { ?>
-                <div class="card-meme">
+                <div class="card-meme" itemscope itemtype="https://schema.org/ImageObject">
                     <div class="card-meme-user">
                         <?php
-                        echo "<a href='User.php?pseudo=" . $row['pseudo'] . "'>" . $row['pseudo'] . "</a>";
+                        echo "<a href='User.php?pseudo=" . $row['pseudo'] . "' itemprop='author'>" . $row['pseudo'] . "</a>";
                         ?>
                     </div>
                     <div class="card-meme-img">
@@ -142,10 +154,11 @@ $result = $stmt->fetch();
                         ?>
                         <picture>
                             <?php
-                            echo "<img class='meme-image' src='./meme/" . $row['chemin_image'] . "' alt='meme1' />";
+                            echo "<img class='meme-image' src='./meme/" . $row['chemin_image'] . "' alt='" . htmlspecialchars($row['description']) . "' itemprop='contentUrl' loading='lazy' />";
                             ?>
                         </picture>
                         </a>
+                        <meta itemprop="name" content="<?php echo htmlspecialchars($row['description']); ?>" />
                     </div>
                     <div class="card-meme-button">
                         <div class="like">
@@ -174,15 +187,11 @@ $result = $stmt->fetch();
                                 echo "<a class='like-button' href='Login.php'>Aimer</a>";
                             }
                             ?>
-                            <!-- <svg class="" title="Like Heart SVG File" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#f785b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                            </svg> -->
                         </div>
                         <div class="share">
                             <?php
                             echo "<a class='share-button' href='Create.php?id=" . $row['id'] . "&from=index.php?page=" . $currentPage . "'>Partager</a>";
                             ?>
-
                         </div>
                     </div>
                     <div class="card-meme-liked">
@@ -197,9 +206,9 @@ $result = $stmt->fetch();
                         </p>
                     </div>
                     <div class="card-meme-description">
-                        <p class="description">
+                        <p class="description" itemprop="description">
                             <?php
-                            echo "<u><b>Description:</b></u> " . $row['description'];
+                            echo "<u><b>Description:</b></u> " . htmlspecialchars($row['description']);
                             ?>
                         </p>
                     </div>
@@ -230,7 +239,7 @@ $result = $stmt->fetch();
                                 ]
                             );
                             foreach ($statement as $ligne) {
-                                echo "<p class='com'>" . $ligne['pseudo'] . ": " . $ligne['message'] . "</p>";
+                                echo "<p class='com'>" . htmlspecialchars($ligne['pseudo']) . ": " . htmlspecialchars($ligne['message']) . "</p>";
                             } ?>
                         </div>
                         <?php
@@ -241,7 +250,6 @@ $result = $stmt->fetch();
                         echo "<input hidden type='text' name='id' value='" . $row['id'] . "' />";
                         echo "<input hidden type='text' name='from' value='index.php?page=" . $currentPage . "' />";
                         ?>
-
                         <input type="submit" class="usrcomment-submit" value="Commenter" />
                         </form>
                     </div>
@@ -250,33 +258,32 @@ $result = $stmt->fetch();
         </div>
 
         <div class="nav-pagination">
-            <nav>
+            <nav aria-label="Pagination">
                 <ul class="pagination">
                     <?php
                     // Lien vers la page précédente (désactivé si on se trouve sur la 1ère page)
                     if ($currentPage > 1) {
                         echo "<li class='page-item'>";
-                        echo "<a href='./index.php?page=" . ($currentPage - 1) . "' class='page-link'>Précédente</a>";
+                        echo "<a href='./index.php?page=" . ($currentPage - 1) . "' class='page-link' rel='prev'>Précédente</a>";
                         echo "</li>";
                     }
                     for ($page = 1; $page <= $pages; $page++) {
                         // Lien vers chacune des pages (activé si on se trouve sur la page correspondante)
+                        $current = $page === $currentPage ? ' aria-current="page"' : '';
                         echo "<li class='page-item'>";
-                        echo "<a href='./index.php?page=" . $page . "' class='page-link'>$page</a>";
+                        echo "<a href='./index.php?page=" . $page . "' class='page-link'$current>$page</a>";
                         echo "</li>";
                     }
                     // Lien vers la page suivante (désactivé si on se trouve sur la dernière page) 
                     if ($currentPage < $pages) {
                         echo "<li class='page-item'>";
-                        echo "<a href='./index.php?page=" . ($currentPage + 1) . "' class='page-link'>Suivante</a>";
+                        echo "<a href='./index.php?page=" . ($currentPage + 1) . "' class='page-link' rel='next'>Suivante</a>";
                         echo "</li>";
                     }
                     ?>
                 </ul>
             </nav>
         </div>
-
-
     </main>
 </body>
 
